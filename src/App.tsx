@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import HomePage from './pages/HomePage';
@@ -16,11 +15,9 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/marketplace" element={<MarketplacePage />} />
-          <Route 
-            path="/dashboard" 
-            element={
-              isAuthenticated ? <DashboardPage /> : <Navigate to="/" />
-            } 
+          <Route
+            path="/dashboard"
+            element={isAuthenticated ? <DashboardPage /> : <Navigate to="/" />}
           />
         </Routes>
       </div>

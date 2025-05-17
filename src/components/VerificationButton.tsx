@@ -1,38 +1,41 @@
-import React from 'react';
+
 import { IDKitWidget, ISuccessResult } from '@worldcoin/idkit';
-import { Shield } from 'lucide-react';
+import axios from 'axios';
 
-type VerificationButtonProps = {
-  onSuccess: (result: ISuccessResult) => void;
-  appId: string;
-  action: string;
-};
+const VerificationButton = () => {
+  const handleSuccess = async (result: ISuccessResult) => {
+    try {
+      const response = await axios.post('https://7227-190-9-183-30.ngrok-free.app/api/verify', {
+        merkle_root: result.merkle_root,
+        nullifier_hash: result.nullifier_hash,
+        proof: result.proof,
+        credential_type: result.credential_type,
+        signal: "hello"
 
-const VerificationButton: React.FC<VerificationButtonProps> = ({
-  onSuccess,
-  appId,
-  action
-}) => {
+      });
+
+      if (response.data.success) {
+        alert('✅ Verificado correctamente');
+        // Aquí puedes redirigir al dashboard o mostrar contenido privado
+      } else {
+        alert('❌ Verificación fallida');
+      }
+    } catch (error) {
+      console.error('Error verificando:', error);
+      alert('❌ Error en la verificación');
+    }
+  };
+
   return (
     <IDKitWidget
-      app_id={appId}
-      action={action}
-      onSuccess={onSuccess}
-      walletConnectProjectId="world_id_demo"
-      signal="world_id_demo_signal"
-      title="World ID Verification"
-      handleVerify={async (proof) => {
-        // This is required by the widget but the actual verification happens in the backend
-        return true;
-      }}
+      app_id="app_3e7d0782d2b470ebcdbbac2bf38893d2" // ← Tu App ID
+      action="safe-access"
+      signal="hello"
+      onSuccess={handleSuccess}
     >
       {({ open }) => (
-        <button 
-          onClick={open}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg shadow transition-colors duration-300 flex items-center"
-        >
-          <Shield className="h-5 w-5 mr-2" />
-          Verify with World ID
+        <button onClick={open} className="bg-blue-600 text-white px-4 py-2 rounded">
+          Iniciar sesión con World ID
         </button>
       )}
     </IDKitWidget>

@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { SiweMessage } from 'siwe';
-import ngrok from 'ngrok';
+import axios from 'axios';
 
 const app = express();
 const PORT = 3001;
@@ -9,74 +8,40 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
-// Store nonces in memory (use a proper database in production)
-const nonces = new Set();
-
 app.get('/api/nonce', (req, res) => {
-  const nonce = Math.floor(Math.random() * 1000000).toString();
-  nonces.add(nonce);
+  const nonce = Math.floor(Math.random() * 100000).toString();
   res.json({ nonce });
 });
 
-app.post('/api/verify-siwe', async (req, res) => {
+app.post('/api/verify', async (req, res) => {
   try {
-    const { message, signature, address } = req.body;
-    const siweMessage = new SiweMessage(message);
-    
-    // Verify the signature
-    const fields = await siweMessage.verify({ signature, address });
-    
-    if (fields.success && nonces.has(fields.data.nonce)) {
-      nonces.delete(fields.data.nonce);
+    const { merkle_root, nullifier_hash, proof, credential_type, signal } = req.body;
+
+    // Enviar a la API de verificación de Worldcoin
+    const response = await axios.post('https://developer.worldcoin.org/api/v1/verify', {
+      app_id: 'app_3e7d0782d2b470ebcdbbac2bf38893d2', // Tu App ID real
+      credential_type,
+      merkle_root,
+      nullifier_hash,
+      proof,
+      signal
+    });
+
+    if (response.data.success) {
       res.json({ success: true });
     } else {
-      res.status(401).json({ success: false, error: 'Invalid signature' });
+      res.status(401).json({ success: false, error: 'Invalid World ID proof' });
     }
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error('Error verifying World ID proof:', error.response?.data || error.message);
+    res.status(500).json({ success: false, error: 'Verification failed' });
   }
 });
 
-app.post('/api/initiate-payment', async (req, res) => {
-  try {
-    const { amount, currency } = req.body;
-    // Generate a unique reference ID for the payment
-    const referenceId = `PAY-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    
-    res.json({
-      success: true,
-      referenceId,
-      amount,
-      currency
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
+app.listen(PORT, () => {
+  console.log(`✅ Backend corriendo en http://localhost:${PORT}`);
+});
+app.get('/', (req, res) => {
+  res.send('AgroTrust Global backend funcionando!');
 });
 
-app.post('/api/confirm-payment', async (req, res) => {
-  try {
-    const { transactionId } = req.body;
-    // Here you would verify the transaction with World ID's API
-    // For demo purposes, we'll simulate a successful verification
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
-});
-
-// Start server and create ngrok tunnel
-const startServer = async () => {
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-
-  try {
-    const url = await ngrok.connect(PORT);
-    console.log(`ngrok tunnel created: ${url}`);
-  } catch (error) {
-    console.error('ngrok tunnel creation failed:', error);
-  }
-};
-
-startServer();
