@@ -1,12 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
+import paymentRoutes from './routes/payments';
 
 const app = express();
 const PORT = 3001;
 
 app.use(cors());
 app.use(express.json());
+app.use('/api', paymentRoutes);
 
 app.get('/api/nonce', (req, res) => {
   const nonce = Math.floor(Math.random() * 100000).toString();

@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@worldcoin/idkit": "^0.5.1",
+    "@worldcoin/minikit-js": "^1.9.4",
     "axios": "^1.9.0",
     "cors": "^2.8.5",
     "ethers": "^6.9.0",
@@ -19,6 +20,7 @@
     "siwe": "^3.0.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.2",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^4.2.0",
