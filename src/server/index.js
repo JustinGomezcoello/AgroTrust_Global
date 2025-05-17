@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
+import paymentRoutes from './api/routes/paymentRoutes';
 
 const app = express();
 const PORT = 3001;
@@ -37,6 +38,9 @@ app.post('/api/verify', async (req, res) => {
     res.status(500).json({ success: false, error: 'Verification failed' });
   }
 });
+
+
+app.use('/api/payments', paymentRoutes);
 
 app.listen(PORT, () => {
   console.log(`✅ Backend corriendo en http://localhost:${PORT}`);
