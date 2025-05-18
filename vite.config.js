@@ -10,7 +10,7 @@ export default defineConfig({
     host: true,
     port: 5173,
     allowedHosts: [
-      'bcb4-190-9-183-30.ngrok-free.app' // ← tu subdominio actual de ngrok
+      'a52b-190-9-183-30.ngrok-free.app' // ← tu subdominio actual de ngrok
     ]
   }
 });

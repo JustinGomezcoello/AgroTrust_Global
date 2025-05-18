@@ -5,7 +5,7 @@ import axios from 'axios';
 export const sendPayment = async (reference: string) => {
   const payload: PayCommandInput = {
     reference,
-    to: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', // Replace with actual receiver address
+    to: '0x3d568d2f18445ea75726321d6711dc583fc014b2', // Replace with actual receiver address
     tokens: [
       {
         symbol: Tokens.WLD,
