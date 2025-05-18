@@ -5,7 +5,7 @@ import axios from 'axios';
 const SendPaymentButton: React.FC = () => {
   const sendPayment = async () => {
     try {
-      const { data: initiateData } = await axios.post('/api/payments/initiate-payment');
+      const { data: initiateData } = await axios.post('https://5770-190-9-183-30.ngrok-free.app/api/payments/initiate-payment');
       const reference = initiateData.id;
 
       const payload: PayCommandInput = {
@@ -32,7 +32,7 @@ const SendPaymentButton: React.FC = () => {
       const { finalPayload } = await MiniKit.commandsAsync.pay(payload);
 
       if (finalPayload.status === 'success') {
-        const verifyRes = await axios.post('/api/payments/verify-payment', {
+        const verifyRes = await axios.post('https://5770-190-9-183-30.ngrok-free.app/api/payments/verify-payment', {
           payload: finalPayload,
         });
 

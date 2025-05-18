@@ -8,9 +8,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
-    port: 5173,
+    port: 5174,
     allowedHosts: [
-      'a52b-190-9-183-30.ngrok-free.app' // ← tu subdominio actual de ngrok
+      '1241-190-9-183-30.ngrok-free.app' ,'95cd-190-9-183-30.ngrok-free.app ' // ← tu subdominio actual de ngrok
     ]
   }
 });

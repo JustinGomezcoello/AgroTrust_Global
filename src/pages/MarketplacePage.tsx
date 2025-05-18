@@ -86,7 +86,7 @@ const handlePurchase = async (product: Product) => {
   }
 
   try {
-    const res = await fetch('/api/payments/initiate-payment', { method: 'POST' });
+    const res = await fetch('https://5770-190-9-183-30.ngrok-free.app/api/payments/initiate-payment', { method: 'POST' });
     const { id } = await res.json();
 
     const result = await sendPayment(id);

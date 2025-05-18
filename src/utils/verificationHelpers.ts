@@ -25,7 +25,7 @@ export const verifyWorldID = async (
 ): Promise<VerificationResult> => {
   try {
     const response = await axios.post(
-      'https://a52b-190-9-183-30.ngrok-free.app/api/verify', 
+      'https://5770-190-9-183-30.ngrok-free.app/api/verify', 
       verificationData
     );
     

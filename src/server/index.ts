@@ -20,7 +20,7 @@ app.post('/api/verify', async (req, res) => {
     const { merkle_root, nullifier_hash, proof, credential_type, signal } = req.body;
 
     // Enviar a la API de verificación de Worldcoin
-    const response = await axios.post('https://a52b-190-9-183-30.ngrok-free.app/api/v1/verify', {
+    const response = await axios.post('https://5770-190-9-183-30.ngrok-free.app/api/v1/verify', {
       app_id: 'app_130d37495d2efb307d470dfea2607867', // Tu App ID real
       credential_type,
       merkle_root,

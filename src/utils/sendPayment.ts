@@ -27,7 +27,7 @@ export const sendPayment = async (reference: string) => {
   const { finalPayload } = await MiniKit.commandsAsync.pay(payload);
 
   if (finalPayload.status === 'success') {
-    const res = await axios.post('/api/payments/confirm-payment', finalPayload);
+    const res = await axios.post('https://5770-190-9-183-30.ngrok-free.app/api/payments/confirm-payment', finalPayload);
     return res.data;
   }
 
