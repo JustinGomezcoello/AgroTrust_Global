@@ -3,7 +3,7 @@ import express from 'express';
 import paymentRoutes from './api/routes/paymentRoutes'
 
 const app = express();
-const PORT = 3001;
+const PORT = 5173;
 
 //app.use(cors());
 app.use(express.json());
@@ -20,8 +20,8 @@ app.post('/api/verify', async (req, res) => {
     const { merkle_root, nullifier_hash, proof, credential_type, signal } = req.body;
 
     // Enviar a la API de verificación de Worldcoin
-    const response = await axios.post('https://developer.worldcoin.org/api/v1/verify', {
-      app_id: 'app_3e7d0782d2b470ebcdbbac2bf38893d2', // Tu App ID real
+    const response = await axios.post('https://5770-190-9-183-30.ngrok-free.app/api/v1/verify', {
+      app_id: 'app_130d37495d2efb307d470dfea2607867', // Tu App ID real
       credential_type,
       merkle_root,
       nullifier_hash,

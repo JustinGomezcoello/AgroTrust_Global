@@ -11,7 +11,7 @@ const SendPaymentButton: React.FC = () => {
 
       const payload: PayCommandInput = {
         reference,
-        to: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+        to: '0x3d568d2f18445ea75726321d6711dc583fc014b2',
         tokens: [
           {
             symbol: Tokens.WLD,
