@@ -1,61 +1,67 @@
-import { IDKitWidget, ISuccessResult } from '@worldcoin/idkit';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { MiniKit, VerifyCommandInput, VerificationLevel, ISuccessResult } from '@worldcoin/minikit-js';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
-import { useState } from 'react';
-import { APP_ID, BACKENDURL } from '../../environtment';
-import SendPaymentButton from './sendPaymentButton';
 
-const VerificationButton = () => {
-  const navigate = useNavigate();
+const VerifyButton = () => {
   const { setUserProof } = useAuth();
-  const [isVerified, setIsVerified] = useState(false);
 
-  const handleSuccess = async (result: ISuccessResult) => {
+  const handleVerify = async () => {
+    if (!MiniKit.isInstalled()) {
+      alert('World App is not installed or accessible.');
+      return;
+    }
+
+    const verifyPayload: VerifyCommandInput = {
+      action: 'safe-access', // Must match backend
+      signal: '0x12312', // Optional
+      verification_level: VerificationLevel.Orb,
+    };
+
     try {
-      const response = await axios.post(`${BACKENDURL}api/verify`, {
-        merkle_root: result.merkle_root,
-        nullifier_hash: result.nullifier_hash,
-        proof: result.proof,
-        credential_type: result.credential_type,
-        signal: 'hello',
+      const { finalPayload } = await MiniKit.commandsAsync.verify(verifyPayload);
+
+      if (finalPayload.status === 'error') {
+        console.error('Verification error:', finalPayload);
+        alert('❌ Verification failed.');
+        return;
+      }
+
+      const response = await fetch('/api/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          payload: finalPayload as ISuccessResult,
+          action: verifyPayload.action,
+          signal: verifyPayload.signal,
+        }),
       });
 
-      if (response.data.success) {
+      const data = await response.json();
+
+      if (response.ok && data.success) {
         setUserProof({
-          nullifier_hash: result.nullifier_hash,
-          verification_level: 'orb',
+          nullifier_hash: finalPayload.nullifier_hash,
+          verification_level: finalPayload.verification_level,
         });
-        setIsVerified(true); // Show payment button
+        alert('✅ Verification successful!');
       } else {
-        alert('❌ Verificación fallida');
+        console.error('Backend verification failed:', data);
+        alert('❌ Verification was rejected by backend.');
       }
-    } catch (error) {
-      console.error('❌ Error al verificar:', error);
-      alert('❌ Hubo un error en la verificación');
+    } catch (err) {
+      console.error('Unexpected verification error:', err);
+      alert('❌ Something went wrong.');
     }
   };
 
   return (
-    <div className="space-y-4">
-      {!isVerified ? (
-        <IDKitWidget
-          app_id={APP_ID}
-          action="safe-access"
-          signal="hello"
-          onSuccess={handleSuccess}
-        >
-          {({ open }) => (
-            <button onClick={open} className="bg-blue-600 text-white px-4 py-2 rounded">
-              Iniciar sesión con World ID
-            </button>
-          )}
-        </IDKitWidget>
-      ) : (
-        <SendPaymentButton />
-      )}
-    </div>
+    <button
+      onClick={handleVerify}
+      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition duration-200"
+    >
+      Verify with World App
+    </button>
   );
 };
 
-export default VerificationButton;
+export default VerifyButton;
