@@ -12,6 +12,6 @@ export async function initiatePayment(req: Request, res: Response): Promise<void
 
 export async function verifyPayment(req: Request, res: Response): Promise<void> {
   const { payload } = req.body as { payload: MiniAppPaymentSuccessPayload };
-  const success = await verifyTransaction(payload);z
+  const success = await verifyTransaction(payload);
   res.json({ success });
 }

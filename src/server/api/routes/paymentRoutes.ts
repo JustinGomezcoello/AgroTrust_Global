@@ -1,9 +1,9 @@
 import express from 'express';
 import { initiatePayment, verifyPayment } from '../../controllers/paymentController';
 
-const router = express.Router();
+const paymentRoutes = express.Router();
 
-router.post('/initiate-payment', initiatePayment);
-router.post('/verify-payment', verifyPayment);
+paymentRoutes.post('/initiate-payment', initiatePayment);
+paymentRoutes.post('/verify-payment', verifyPayment);
 
-export default router;
+export default paymentRoutes;
