@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 
 import react from '@vitejs/plugin-react';
+import { BACKENDURL, FRONTENDURL } from './environtment';
 
 
 
@@ -10,7 +11,7 @@ export default defineConfig({
     host: true,
     port: 5173,
     allowedHosts: [
-      '680e-190-9-183-30.ngrok-free.app' // ← tu subdominio actual de ngrok
+      BACKENDURL, FRONTENDURL // ← tu subdominio actual de ngrok
     ]
   }
 });

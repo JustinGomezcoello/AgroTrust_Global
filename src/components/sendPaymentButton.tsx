@@ -1,11 +1,12 @@
 import React from 'react';
 import { MiniKit, tokenToDecimals, Tokens, PayCommandInput } from '@worldcoin/minikit-js';
 import axios from 'axios';
+import { BACKENDURL } from '../../environtment';
 
 const SendPaymentButton: React.FC = () => {
   const sendPayment = async () => {
     try {
-      const { data: initiateData } = await axios.post('/api/payments/initiate-payment');
+      const { data: initiateData } = await axios.post(`${BACKENDURL}/api/payments/initiate-payment`);
       const reference = initiateData.id;
 
       const payload: PayCommandInput = {
@@ -32,7 +33,7 @@ const SendPaymentButton: React.FC = () => {
       const { finalPayload } = await MiniKit.commandsAsync.pay(payload);
 
       if (finalPayload.status === 'success') {
-        const verifyRes = await axios.post('/api/payments/verify-payment', {
+        const verifyRes = await axios.post(`${BACKENDURL}/api/payments/verify-payment`, {
           payload: finalPayload,
         });
 

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { BACKENDURL } from '../../environtment';
 
 // Type for verification result
 export type VerificationResult = {
@@ -25,7 +26,7 @@ export const verifyWorldID = async (
 ): Promise<VerificationResult> => {
   try {
     const response = await axios.post(
-      'http://localhost:3001/api/verify', 
+      `${BACKENDURL}/api/verify`, 
       verificationData
     );
     

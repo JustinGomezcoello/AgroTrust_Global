@@ -1,6 +1,7 @@
 // utils/sendPayment.ts
 import { MiniKit, tokenToDecimals, Tokens, PayCommandInput } from '@worldcoin/minikit-js';
 import axios from 'axios';
+import { BACKENDURL } from '../../environtment';
 
 export const sendPayment = async (reference: string) => {
   const payload: PayCommandInput = {
@@ -27,7 +28,7 @@ export const sendPayment = async (reference: string) => {
   const { finalPayload } = await MiniKit.commandsAsync.pay(payload);
 
   if (finalPayload.status === 'success') {
-    const res = await axios.post('/api/payments/confirm-payment', finalPayload);
+    const res = await axios.post(`${BACKENDURL}/api/payments/confirm-payment`, finalPayload);
     return res.data;
   }
 

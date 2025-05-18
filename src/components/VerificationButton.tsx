@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { useState } from 'react';
-import SendPaymentButton from './SendPaymentButton';
+import { APP_ID, BACKENDURL } from '../../environtment';
+import SendPaymentButton from './sendPaymentButton';
 
 const VerificationButton = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const VerificationButton = () => {
 
   const handleSuccess = async (result: ISuccessResult) => {
     try {
-      const response = await axios.post('https://your-server.com/api/verify', {
+      const response = await axios.post(`${BACKENDURL}api/verify`, {
         merkle_root: result.merkle_root,
         nullifier_hash: result.nullifier_hash,
         proof: result.proof,
@@ -39,7 +40,7 @@ const VerificationButton = () => {
     <div className="space-y-4">
       {!isVerified ? (
         <IDKitWidget
-          app_id="app_3e7d0782d2b470ebcdbbac2bf38893d2"
+          app_id={APP_ID}
           action="safe-access"
           signal="hello"
           onSuccess={handleSuccess}

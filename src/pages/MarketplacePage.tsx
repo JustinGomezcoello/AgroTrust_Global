@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Search, Filter, Star, MapPin, Building, DollarSign } from 'lucide-react';
 import { sendPayment } from '../utils/sendPayment';
+import { BACKENDURL } from '../../environtment';
 
 type Product = {
   id: string;
@@ -86,7 +87,7 @@ const handlePurchase = async (product: Product) => {
   }
 
   try {
-    const res = await fetch('/api/payments/initiate-payment', { method: 'POST' });
+    const res = await fetch(`${BACKENDURL}/api/payments/initiate-payment`, { method: 'POST' });
     const { id } = await res.json();
 
     const result = await sendPayment(id);
