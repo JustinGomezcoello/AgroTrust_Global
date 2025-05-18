@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Search, Filter, Star, MapPin, Building, DollarSign } from 'lucide-react';
+import { sendPayment } from '../utils/sendPayment';
 
 type Product = {
   id: string;
@@ -77,14 +78,29 @@ const MarketplacePage: React.FC = () => {
     return matchesSearch && matchesType && matchesPrice;
   });
 
-  const handlePurchase = (product: Product) => {
-    if (!isAuthenticated) {
-      alert('Please connect your wallet to make a purchase');
-      return;
+  
+const handlePurchase = async (product: Product) => {
+  if (!isAuthenticated) {
+    alert('Please connect your wallet to make a purchase');
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/payments/initiate-payment', { method: 'POST' });
+    const { id } = await res.json();
+
+    const result = await sendPayment(id);
+
+    if (result.success) {
+      alert(`✅ Payment successful for ${product.name}!`);
+    } else {
+      alert('❌ Payment failed to confirm');
     }
-    // Implement purchase logic here
-    console.log('Purchasing:', product);
-  };
+  } catch (err) {
+    console.error(err);
+    alert('❌ Error during payment');
+  }
+};
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
