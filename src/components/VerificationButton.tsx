@@ -12,7 +12,7 @@ const VerificationButton = () => {
 
   const handleSuccess = async (result: ISuccessResult) => {
     try {
-      const response = await axios.post('https://your-server.com/api/verify', {
+      const response = await axios.post('https://bcb4-190-9-183-30.ngrok-free.app/api/verify', {
         merkle_root: result.merkle_root,
         nullifier_hash: result.nullifier_hash,
         proof: result.proof,
