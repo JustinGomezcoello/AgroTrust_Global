@@ -2,7 +2,7 @@ import React from 'react';
 import { MiniKit, VerifyCommandInput, VerificationLevel, ISuccessResult } from '@worldcoin/minikit-js';
 import { useAuth } from '../context/AuthContext';
 
-const VerifyButton = () => {
+const VerificationButton = () => {
   const { setUserProof } = useAuth();
 
   const handleVerify = async () => {
@@ -12,8 +12,8 @@ const VerifyButton = () => {
     }
 
     const verifyPayload: VerifyCommandInput = {
-      action: 'safe-access', // Must match backend
-      signal: '0x12312', // Optional
+      action: 'safe-access',
+      signal: '0x12312', // Optional additional data
       verification_level: VerificationLevel.Orb,
     };
 
@@ -24,21 +24,19 @@ const VerifyButton = () => {
         console.error('Verification error:', finalPayload);
         alert('❌ Verification failed.');
         return;
-      }
-
-      const response = await fetch('/api/verify', {
+      }      const response = await fetch('/api/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           payload: finalPayload as ISuccessResult,
-          action: verifyPayload.action,
+          action: 'safe-access',
           signal: verifyPayload.signal,
         }),
       });
 
       const data = await response.json();
 
-      if (response.ok && data.success) {
+      if (data.status === 200) {
         setUserProof({
           nullifier_hash: finalPayload.nullifier_hash,
           verification_level: finalPayload.verification_level,
@@ -64,4 +62,4 @@ const VerifyButton = () => {
   );
 };
 
-export default VerifyButton;
+export default VerificationButton;

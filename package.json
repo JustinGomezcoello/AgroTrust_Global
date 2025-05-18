@@ -1,15 +1,19 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "node src/server/index.js",
+    "dev": "concurrently \"vite\" \"npm run start\"",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/cors": "^2.8.18",
     "@worldcoin/idkit": "^2.1.0",
     "@worldcoin/minikit-js": "^1.9.4",
     "axios": "^1.9.0",
+    "body-parser": "^2.2.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
     "ethers": "^6.9.0",
     "express": "^5.1.0",
     "lucide-react": "^0.294.0",
@@ -25,8 +29,10 @@
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^4.2.0",
     "autoprefixer": "^10.4.16",
+    "concurrently": "^9.1.2",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5.2.2",
     "vite": "^6.3.5"
   }
